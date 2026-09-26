@@ -69,9 +69,9 @@ export default function Delivery() {
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
             <a href={site.phoneHref} className="btn-gold h-[60px] px-8 text-[18px]">
-              <I.Phone size={18} /> Позвонить {site.phone}
+              <I.Phone size={18} /> Позвонить и заказать
             </a>
-            <span className="text-[13px] text-ink-soft">{site.hours}</span>
+            <a href={site.phoneHref} className="inline-flex min-h-[44px] items-center font-serif text-[20px] text-gold-200 hover:text-gold-300">{site.phone}</a>
           </div>
         </Reveal>
 

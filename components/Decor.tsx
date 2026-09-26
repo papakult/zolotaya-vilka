@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion, type HTMLMotionProps } from "framer-motion";
 import type { ReactNode } from "react";
 
-/** Золотая вилка, как в логотипе макета */
+/** Золотая Вилка, как в логотипе макета */
 export function ForkMark({ className = "", dark = false }: { className?: string; dark?: boolean }) {
   const id = dark ? "fk-dark" : "fk-gold";
   return (
@@ -36,7 +36,7 @@ export function ForkMark({ className = "", dark = false }: { className?: string;
 
 export function Logo({ dark = false, compact = false }: { dark?: boolean; compact?: boolean }) {
   return (
-    <Link href="/" className="group flex shrink-0 items-center gap-3 whitespace-nowrap" aria-label="Золотая вилка, на главную">
+    <Link href="/" className="group flex shrink-0 items-center gap-3 whitespace-nowrap" aria-label="Золотая Вилка, на главную">
       <ForkMark dark={dark} className={compact ? "h-11 w-4" : "h-12 w-[18px] sm:h-14 sm:w-5"} />
       <span className="leading-none">
         <span
@@ -44,7 +44,7 @@ export function Logo({ dark = false, compact = false }: { dark?: boolean; compac
             dark ? "text-cocoa" : "bg-gradient-to-b from-gold-50 via-gold-200 to-gold-400 bg-clip-text text-transparent"
           }`}
         >
-          Золотая вилка
+          Золотая Вилка
         </span>
         <span
           className={`mt-1 block text-center font-serif text-[13px] tracking-[0.18em] sm:text-[15px] ${

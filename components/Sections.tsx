@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Branch, Logo, Reveal, ScriptNote } from "./Decor";
 import * as I from "./Icons";
-import BookingForm from "./BookingForm";
 import { img, mapEmbed, routeHref, site } from "@/lib/site";
 import { featured } from "@/lib/menu";
 
@@ -21,7 +20,7 @@ export function About() {
             настоящего отдыха
           </h2>
           <p className="mt-7 max-w-[340px] text-[15px] leading-[1.6] text-ink-muted">
-            «Золотая вилка» — это место, где гармонично сочетаются домашняя кухня, тёплый приём и особая атмосфера. Мы создали
+            «Золотая Вилка» — это место, где гармонично сочетаются домашняя кухня, тёплый приём и особая атмосфера. Мы создали
             пространство для тех, кто ценит вкусную еду, душевные разговоры и время с близкими.
           </p>
           <Link href="#contacts" className="btn-outline mt-10 w-fit px-10">
@@ -64,7 +63,7 @@ export function Quote() {
         <div className="relative min-h-[300px] sm:min-h-[380px] md:min-h-[430px]">
           <Image
             src={img.facade}
-            alt="Фасад и летняя терраса ресторана «Золотая вилка»"
+            alt="Фасад и летняя терраса ресторана «Золотая Вилка»"
             fill
             sizes="(min-width:768px) 60vw, 100vw"
             className="object-cover object-[60%_center]"
@@ -82,7 +81,7 @@ export function Quote() {
               Настоящие встречи.
             </blockquote>
             <span className="mt-8 block h-px w-10 bg-gold-300" />
-            <p className="mt-6 font-body text-[13px] tracking-[0.12em] text-ink-muted">Золотая вилка</p>
+            <p className="mt-6 font-body text-[13px] tracking-[0.12em] text-ink-muted">Золотая Вилка</p>
           </div>
         </Reveal>
       </div>
@@ -177,9 +176,29 @@ export function BookingDelivery() {
         <Reveal className="relative overflow-hidden rounded-md border border-gold-400/60 bg-coal-800/95 p-6 shadow-card sm:p-8">
           <Branch className="pointer-events-none absolute right-6 top-6 h-36 w-28 text-gold-500/35" />
           <p className="eyebrow">Бронирование столика</p>
-          <h3 className="mt-4 font-serif text-[34px] leading-tight text-[#f7f1e8] sm:text-[38px]">Забронируйте столик</h3>
-          <p className="mb-6 mt-1 text-[14px] text-ink-muted">Мы свяжемся с вами для подтверждения брони.</p>
-          <BookingForm />
+          <h3 className="mt-4 font-serif text-[34px] leading-tight text-[#f7f1e8] sm:text-[38px]">Забронировать столик</h3>
+          <p className="mt-4 max-w-[340px] text-[15px] leading-[1.55] text-ink-muted">
+            Позвоните нам, и мы подберём удобное время и подходящий столик.
+          </p>
+          <div className="mt-7 flex flex-col items-start gap-1">
+            <a href={site.phoneHref} className="btn-gold w-full sm:w-fit sm:px-8">
+              <I.Phone size={18} /> Позвонить и забронировать
+            </a>
+            <a href={site.phoneHref} className="inline-flex min-h-[44px] items-center font-serif text-[22px] text-gold-200 hover:text-gold-300">
+              {site.phone}
+            </a>
+          </div>
+          <ul className="mt-8 grid gap-4 border-t border-gold-500/20 pt-6 sm:grid-cols-2">
+            {[
+              { i: I.People, t: "Для компании и для двоих" },
+              { i: I.Clock, t: "Время подберём по звонку" },
+            ].map((f) => (
+              <li key={f.t} className="flex items-center gap-3 text-[13px] text-ink-muted">
+                <f.i size={26} className="shrink-0 text-gold-300" strokeWidth={1.2} />
+                {f.t}
+              </li>
+            ))}
+          </ul>
           <ScriptNote
             lines={["Вкусные", "встречи", "начинаются", "здесь"]}
             rotate={-12}
@@ -194,7 +213,7 @@ export function BookingDelivery() {
         >
           <div className="relative flex-1 p-6 sm:p-8">
             <div className="absolute -right-10 top-16 hidden h-[260px] w-[260px] overflow-hidden rounded-full border border-gold-500/30 opacity-90 sm:block">
-              <Image src={featured[2].image} alt="Горячее блюдо «Золотой вилки»" fill sizes="260px" className="object-cover" />
+              <Image src={featured[2].image} alt="Горячее блюдо «Золотой Вилки»" fill sizes="260px" className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-r from-coal-800 via-coal-800/20 to-transparent" />
             </div>
             <div className="relative">
@@ -207,10 +226,10 @@ export function BookingDelivery() {
                 <br />у вас дома
               </h3>
               <p className="mt-5 max-w-[270px] text-[15px] leading-[1.55] text-ink-muted">
-                Оформите заказ на самовывоз или с доставкой по звонку и наслаждайтесь вкусом «Золотой вилки» в любом месте.
+                Оформите заказ на самовывоз или с доставкой по звонку и наслаждайтесь вкусом «Золотой Вилки» в любом месте.
               </p>
-              <a href={site.phoneHref} className="btn-gold mt-7 w-full sm:w-[240px]">
-                <I.Phone size={18} /> Позвонить
+              <a href={site.phoneHref} className="btn-gold relative z-10 mt-7 w-full whitespace-nowrap sm:w-fit sm:px-8">
+                <I.Phone size={18} /> Позвонить и заказать
               </a>
               <p className="mt-3 text-[12.5px] text-ink-soft">Все заказы принимаем только по телефону.</p>
             </div>
@@ -254,7 +273,7 @@ export function Contacts() {
             <li className="flex gap-5">
               <I.Phone size={26} className="mt-1 shrink-0 text-gold-300" />
               <div>
-                <a href={site.phoneHref} className="font-serif text-[20px] text-ink hover:text-gold-200">
+                <a href={site.phoneHref} className="inline-flex min-h-[44px] items-center font-serif text-[20px] text-ink hover:text-gold-200">
                   {site.phone}
                 </a>
                 <p className="text-[13px] text-ink-muted">Звоните, мы на связи</p>
@@ -263,44 +282,26 @@ export function Contacts() {
             <li className="flex gap-5">
               <I.Pin size={26} className="mt-1 shrink-0 text-gold-300" />
               <div>
-                <p className="font-serif text-[20px] text-ink">{site.address}</p>
+                <p className="font-serif text-[20px] leading-tight text-ink">{site.address}</p>
                 <p className="text-[13px] text-ink-muted">{site.addressNote}</p>
               </div>
             </li>
             <li className="flex gap-5">
               <I.Clock size={26} className="mt-1 shrink-0 text-gold-300" />
               <div>
-                <p className="font-serif text-[20px] leading-tight text-ink">
-                  {site.hoursLines[0]}
-                  <br />
-                  {site.hoursLines[1]}
-                </p>
-                <p className="text-[13px] text-ink-muted">Ждём вас!</p>
+                <p className="font-serif text-[20px] leading-tight text-ink">Часы работы</p>
+                <p className="text-[13px] text-ink-muted">Уточняйте по телефону</p>
               </div>
             </li>
           </ul>
-          <div className="mt-9 flex gap-3">
-            {[
-              { h: site.whatsapp, i: I.Whatsapp, l: "WhatsApp" },
-              { h: site.telegram, i: I.Telegram, l: "Telegram" },
-              { h: site.instagram, i: I.Instagram, l: "Instagram" },
-            ].map((s) => (
-              <a
-                key={s.l}
-                href={s.h}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.l}
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-gold-400/70 text-gold-200 transition hover:bg-gold-300/10"
-              >
-                <s.i size={22} />
-              </a>
-            ))}
+          <div className="mt-9 flex flex-col gap-3">
+            <a href={site.phoneHref} className="btn-gold w-full">
+              <I.Phone size={18} /> Позвонить
+            </a>
+            <a href={site.gis} target="_blank" rel="noopener noreferrer" className="btn-outline w-full px-5">
+              Открыть в 2ГИС <I.Arrow />
+            </a>
           </div>
-          <p className="mt-3 text-[13px] leading-snug text-ink-muted">
-            Напишите нам
-            <br />в мессенджерах
-          </p>
         </Reveal>
 
         <div className="grid gap-4">
@@ -401,13 +402,18 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-gold-500/15">
-        <div className="container-x flex flex-col gap-2 py-5 text-[12px] text-ink-soft sm:flex-row sm:justify-between">
+        <div className="container-x flex flex-col gap-2 pb-24 pt-5 text-[12px] lg:pb-5 text-ink-soft sm:flex-row sm:justify-between">
           <span>
             © {new Date().getFullYear()} «{site.name}», {site.address}
           </span>
-          <a href={site.phoneHref} className="hover:text-gold-200">
-            {site.phone}
-          </a>
+          <span className="flex flex-wrap gap-x-6 gap-y-2">
+            <a href={site.phoneHref} className="inline-flex min-h-[44px] items-center hover:text-gold-200">
+              {site.phone}
+            </a>
+            <Link href="/privacy" className="inline-flex min-h-[44px] items-center hover:text-gold-200">
+              Политика конфиденциальности
+            </Link>
+          </span>
         </div>
       </div>
     </footer>

@@ -2,6 +2,7 @@
 
 import { getImageProps } from "next/image";
 import Link from "next/link";
+import { preload } from "react-dom";
 import { motion } from "framer-motion";
 import { ScriptNote } from "./Decor";
 import * as I from "./Icons";
@@ -27,6 +28,9 @@ export default function Hero() {
   const { props: { srcSet: mSet } } = getImageProps({ ...common, src: img.heroMobile });
   const desktop = { srcSet: dSet, rest: dRest };
   const mobile = { srcSet: mSet };
+  // предзагрузка только кадра Hero: свой для телефона и для компьютера
+  preload(img.heroMobile, { as: "image", imageSrcSet: mSet, imageSizes: "100vw", fetchPriority: "high", media: "(max-width: 767px)" } as never);
+  preload(img.hero, { as: "image", imageSrcSet: dSet, imageSizes: "100vw", fetchPriority: "high", media: "(min-width: 768px)" } as never);
   return (
     <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden border-b border-gold-500/40 bg-coal-900">
       {/* фото на всю ширину */}
@@ -41,7 +45,7 @@ export default function Hero() {
           <source srcSet={mobile.srcSet} sizes="100vw" />
           <img
             {...desktop.rest}
-            alt="Уютный столик у окна с золотыми шторами, лампой и свечой в ресторане «Золотая вилка»"
+            alt="Уютный столик у окна с золотыми шторами, лампой и свечой в ресторане «Золотая Вилка»"
             className="absolute inset-0 h-full w-full object-cover object-center md:object-[center_58%]"
           />
         </picture>

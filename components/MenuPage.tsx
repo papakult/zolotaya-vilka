@@ -102,7 +102,7 @@ export default function MenuPage() {
               <p className="text-[13px] leading-snug text-ink-muted">
                 Проведите особенный
                 <br />
-                вечер в «Золотой вилке»
+                вечер в «Золотой Вилке»
               </p>
             </div>
             <Link href="/#booking" className="btn-gold w-full sm:w-[270px]">
