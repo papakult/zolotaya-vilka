@@ -115,7 +115,10 @@ export default function MenuTabs() {
 
   // активная вкладка всегда видна в ленте на телефоне
   useEffect(() => {
-    tabRefs.current[active]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    // только горизонтальная прокрутка ленты, без прокрутки страницы
+    const el = tabRefs.current[active];
+    const bar = el?.parentElement;
+    if (el && bar) bar.scrollTo({ left: el.offsetLeft - bar.clientWidth / 2 + el.clientWidth / 2, behavior: "smooth" });
   }, [active]);
 
   // прокрутка к началу вкладок (к неподвижному якорю: у липкой панели своя позиция)
