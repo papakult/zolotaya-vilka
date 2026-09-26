@@ -31,6 +31,8 @@ export const nav = [
 
 export const img = {
   terrace: "/images/interior/terrace.jpg",
+  /** фасад и терраса: без машины, тёплая обработка, затемнённая улица */
+  facade: "/images/interior/facade.jpg",
   hallChandelier: "/images/interior/hall-chandelier.jpg",
   bar: "/images/interior/bar.jpg",
   tableShelves: "/images/interior/table-shelves.jpg",
