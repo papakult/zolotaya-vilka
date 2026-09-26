@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 24px;
+}
+
+body {
+  background: #15100b;
+  color: #efe6d8;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* лёгкая «бумажная» фактура тёмного фона, как в макетах */
+.bg-texture {
+  background-color: #17110c;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(120, 84, 44, 0.16), transparent 60%),
+    radial-gradient(ellipse at 90% 100%, rgba(120, 84, 44, 0.12), transparent 55%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.6  0 0 0 0 0.45  0 0 0 0 0.3  0 0 0 .07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.bg-cream-texture {
+  background-color: #f6efe4;
+  background-image:
+    radial-gradient(ellipse at 10% 0%, rgba(255, 255, 255, 0.7), transparent 60%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.4  0 0 0 0 0.3  0 0 0 .05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-14;
+  }
+  .eyebrow {
+    @apply flex items-center gap-4 font-body text-[11px] uppercase tracking-eyebrow text-ink-muted;
+  }
+  .eyebrow::after {
+    content: "";
+    @apply block h-px w-14 bg-gold-400/80;
+  }
+  .eyebrow-dark {
+    @apply text-cocoa-muted;
+  }
+  .eyebrow-dark::after {
+    @apply w-0;
+  }
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-3 rounded-[4px] bg-gold-btn px-8 py-4 font-serif text-[17px] font-semibold text-coal-900 shadow-gold transition duration-300 hover:brightness-110 active:translate-y-px;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-3 rounded-[4px] border border-gold-300/80 px-8 py-4 font-serif text-[17px] text-ink transition duration-300 hover:bg-gold-300/10;
+  }
+  .gold-frame {
+    @apply rounded-md border border-gold-400/60;
+  }
+  .field {
+    @apply flex h-[52px] w-full items-center gap-3 rounded-[4px] border border-gold-400/45 bg-coal-900/40 px-4 font-body text-[14px] text-ink placeholder:text-ink-soft focus-within:border-gold-300;
+  }
+  .field input,
+  .field select {
+    @apply h-full w-full bg-transparent outline-none placeholder:text-ink-soft;
+  }
+}
+
+/* нативные date/time иконки в тёмной теме */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(78%) sepia(30%) saturate(500%) hue-rotate(350deg);
+  cursor: pointer;
+}
+input.picker-empty::-webkit-datetime-edit {
+  opacity: 0;
+}
+select option {
+  background: #1c150f;
+  color: #efe6d8;
+}
+
+/* тёмная карта под стиль макета */
+.map-dark {
+  filter: grayscale(1) invert(0.92) sepia(0.35) hue-rotate(345deg) brightness(0.85) contrast(0.95);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
