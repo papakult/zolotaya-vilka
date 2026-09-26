@@ -1,25 +1,30 @@
 /**
  * Единый файл с контактами и данными ресторана.
- * Всё, что нужно поменять (телефон, адрес, часы, соцсети), меняется здесь.
+ * Всё, что нужно поменять (телефон, адрес, часы), меняется здесь.
  */
+export const SITE_URL = "https://zolotaya-vilka.vercel.app";
+
 export const site = {
-  name: "Золотая вилка",
+  name: "Золотая Вилка",
   tagline: "домашний ресторан",
-  phone: "+7 (918) 123-45-67",
-  phoneHref: "tel:+79181234567",
-  address: "Сочи, ул. Лесная, 12",
-  addressShort: "ул. Лесная, 12",
-  addressNote: "Удобное расположение в центре Сочи",
-  hours: "Ежедневно с 12:00 до 23:00",
-  hoursLines: ["Ежедневно", "с 12:00 до 23:00"],
-  mapQuery: "Сочи, улица Лесная, 12",
-  whatsapp: "https://wa.me/79181234567",
-  telegram: "https://t.me/",
-  instagram: "https://instagram.com/",
+  phone: "+7 999 653-49-83",
+  phoneHref: "tel:+79996534983",
+  phoneE164: "+79996534983",
+  address: "Сочи, Аллея Челтенхэма, 8/5",
+  addressShort: "Аллея Челтенхэма, 8/5",
+  addressNote: "Верхняя Мацеста, Сочи",
+  /** Часы работы не подтверждены: время не указываем, пока не пришлют */
+  hours: "Часы работы уточняйте по телефону",
+  gis: "https://2gis.ru/sochi/geo/70000001116665161",
+  mapQuery: "Сочи, Аллея Челтенхэма, 8/5",
+  /** координаты из карточки 2ГИС */
+  lat: 43.557344,
+  lon: 39.794918,
+  postalCode: "354024",
 };
 
-export const routeHref = `https://yandex.ru/maps/?rtext=~${encodeURIComponent(site.mapQuery)}&rtt=auto`;
-export const mapEmbed = `https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(site.mapQuery)}&z=16`;
+export const routeHref = site.gis;
+export const mapEmbed = `https://yandex.ru/map-widget/v1/?ll=${site.lon},${site.lat}&z=16&pt=${site.lon},${site.lat},pm2rdm`;
 
 export const nav = [
   { label: "Меню", href: "/menu" },
