@@ -30,8 +30,8 @@ export default function Delivery() {
         <Reveal className="flex flex-col justify-center">
           <p className="eyebrow">Доставка и самовывоз</p>
           <h2 className="mt-6 font-serif text-[42px] font-medium leading-[1] text-[#f7f1e8] sm:text-[56px]">
-            Любимые блюда
-            <span className="block font-normal italic text-gold-200">с доставкой по Сочи</span>
+            Доставка
+            <span className="block font-normal italic text-gold-200">любимых блюд</span>
           </h2>
           <p className="mt-6 max-w-[460px] text-[16px] leading-relaxed text-ink">
             Мы готовим блюда только после вашего заказа, аккуратно упаковываем и доставляем по Сочи. Всё так же вкусно, как в ресторане.

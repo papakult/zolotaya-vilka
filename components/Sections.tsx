@@ -71,6 +71,7 @@ export function Quote() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-coal-900 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-coal-900" />
           <div className="absolute inset-0 bg-coal-900/15" />
+          <div className="absolute inset-0 bg-gradient-to-r from-coal-900/85 via-coal-900/25 via-35% to-transparent" />
         </div>
         <Reveal className="relative flex items-center px-6 pb-16 pt-4 md:px-10 md:py-16">
           <div className="md:-ml-10">

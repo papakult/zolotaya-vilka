@@ -9,6 +9,7 @@ import { site } from "@/lib/site";
 import { chefPick, fromPrice, menu, type Dish } from "@/lib/menu";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? "позиция" : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? "позиции" : "позиций");
 
 function DishCard({ dish, i }: { dish: Dish; i: number }) {
   return (
@@ -32,7 +33,11 @@ function DishCard({ dish, i }: { dish: Dish; i: number }) {
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <h3 className="font-serif text-[22px] leading-[1.1] text-[#f7f1e8]">{dish.name}</h3>
-          <span className="shrink-0 whitespace-nowrap font-serif text-[21px] text-gold-200">{dish.price}</span>
+          {dish.price ? (
+            <span className="shrink-0 whitespace-nowrap font-serif text-[21px] text-gold-200">{dish.price}</span>
+          ) : (
+            <span className="shrink-0 whitespace-nowrap pt-1.5 font-body text-[12px] text-ink-soft">цена по телефону</span>
+          )}
         </div>
         <p className="mt-2 flex-1 text-[14px] leading-snug text-ink-muted">{dish.desc}</p>
         <a
@@ -186,32 +191,59 @@ export default function MenuTabs() {
             <div className="mb-8 flex items-end gap-5">
               <h2 className="font-serif text-[40px] leading-none text-[#f7f1e8] sm:text-[48px]">{cat.title}</h2>
               <span className="mb-2 h-px flex-1 bg-gold-400/50" />
-              <span className="mb-1 font-body text-[13px] text-ink-muted">{cat.note ?? fromPrice(cat)}</span>
+              <span className="mb-1 font-body text-[13px] text-ink-muted">{cat.note ?? (fromPrice(cat) || `${cat.items.length} ${plural(cat.items.length)}`)}</span>
             </div>
 
-            {cat.items.length > 0 ? (
+            {cat.compact ? (
+              <div className="grid overflow-hidden rounded-md border border-gold-400/40 bg-coal-800/80 lg:grid-cols-[0.9fr_1.1fr]">
+                <div className="relative min-h-[240px] overflow-hidden lg:min-h-full">
+                  <Image
+                    src={cat.cover}
+                    alt={cat.title}
+                    fill
+                    sizes="(min-width:1024px) 520px, 100vw"
+                    className="object-cover transition duration-[1.4s] ease-out hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-coal-800/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-coal-800/60" />
+                </div>
+                <div className="p-6 sm:p-9">
+                  {cat.items.some((d) => !d.price) && (
+                    <p className="mb-3 font-body text-[12px] uppercase tracking-[0.18em] text-ink-soft">Цены уточните по телефону</p>
+                  )}
+                  <ul className={`grid gap-x-8 ${cat.items.length > 9 ? "sm:grid-cols-2" : ""}`}>
+                    {cat.items.map((dish, i) => (
+                      <motion.li
+                        key={dish.name}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4, delay: Math.min(i, 12) * 0.035 }}
+                        className="flex items-baseline gap-3 border-b border-gold-500/15 py-3"
+                      >
+                        <span className="min-w-0">
+                          <span className="block font-serif text-[19px] leading-tight text-ink">{dish.name}</span>
+                          {dish.desc && <span className="mt-0.5 block text-[12.5px] leading-snug text-ink-muted">{dish.desc}</span>}
+                        </span>
+                        {dish.price && (
+                          <>
+                            <span className="mb-1 flex-1 border-b border-dotted border-gold-500/30" />
+                            <span className="shrink-0 whitespace-nowrap font-serif text-[17px] text-gold-200">{dish.price}</span>
+                          </>
+                        )}
+                      </motion.li>
+                    ))}
+                  </ul>
+                  <a href={site.phoneHref} className="btn-gold mt-7 w-full sm:w-fit">
+                    <I.Phone size={18} /> Заказать по телефону
+                  </a>
+                </div>
+              </div>
+            ) : (
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 {cat.items.map((dish, i) => (
                   <div key={dish.name} className="flex">
                     <DishCard dish={dish} i={i} />
                   </div>
                 ))}
-              </div>
-            ) : (
-              <div className="grid overflow-hidden rounded-md border border-gold-400/40 bg-coal-800/80 md:grid-cols-2">
-                <div className="relative min-h-[260px]">
-                  <Image src={cat.cover} alt={cat.title} fill sizes="(min-width:768px) 600px, 100vw" className="object-cover" />
-                </div>
-                <div className="flex flex-col justify-center p-7 sm:p-10">
-                  <p className="font-serif text-[30px] leading-tight text-[#f7f1e8]">{cat.title}</p>
-                  <p className="mt-3 max-w-[380px] text-[15px] leading-relaxed text-ink-muted">
-                    Позиции и цены этого раздела подскажем по телефону. Администратор расскажет, что готовим сегодня, и сразу примет
-                    заказ.
-                  </p>
-                  <a href={site.phoneHref} className="btn-gold mt-7 w-full sm:w-fit">
-                    <I.Phone size={18} /> {site.phone}
-                  </a>
-                </div>
               </div>
             )}
 
