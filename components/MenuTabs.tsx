@@ -11,7 +11,33 @@ import { chefPick, fromPrice, menu, type Dish } from "@/lib/menu";
 const ease = [0.22, 1, 0.36, 1] as const;
 const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? "позиция" : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? "позиции" : "позиций");
 
-function DishCard({ dish, i }: { dish: Dish; i: number }) {
+/** Позиции списком: название, описание, точки, цена */
+function DishList({ items, cols }: { items: Dish[]; cols?: boolean }) {
+  return (
+    <ul className={`grid gap-x-8 ${cols ? "sm:grid-cols-2" : ""}`}>
+      {items.map((dish, i) => (
+        <motion.li
+          key={dish.name}
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: Math.min(i, 12) * 0.035 }}
+          className="flex items-baseline gap-3 border-b border-gold-500/15 py-3"
+        >
+          <span className="min-w-0">
+            <span className="block font-serif text-[18px] leading-tight text-ink sm:text-[19px]">{dish.name}</span>
+            {dish.desc && <span className="mt-0.5 block text-[12.5px] leading-snug text-ink-muted">{dish.desc}</span>}
+          </span>
+          <span className="mb-1 min-w-4 flex-1 border-b border-dotted border-gold-500/30" />
+          <span className={dish.price ? "shrink-0 whitespace-nowrap font-serif text-[17px] text-gold-200" : "shrink-0 whitespace-nowrap font-body text-[12px] text-ink-soft"}>
+            {dish.price || "по телефону"}
+          </span>
+        </motion.li>
+      ))}
+    </ul>
+  );
+}
+
+function DishCard({ dish, i }: { dish: Dish & { image: string }; i: number }) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
@@ -41,7 +67,7 @@ function DishCard({ dish, i }: { dish: Dish; i: number }) {
             <span className="hidden shrink-0 whitespace-nowrap pt-1.5 font-body text-[12px] text-ink-soft sm:inline">цена по телефону</span>
           )}
         </div>
-        <p className="mt-1 line-clamp-2 flex-1 text-[12.5px] leading-snug text-ink-muted sm:mt-2 sm:line-clamp-none sm:text-[14px]">{dish.desc}</p>
+        <p className="mt-1 line-clamp-2 flex-1 text-[12.5px] leading-snug text-ink-muted sm:mt-2 sm:line-clamp-none sm:text-[14px]">{dish.desc ?? ""}</p>
         {/* нижняя строка на телефоне: цена + маленькая кнопка звонка */}
         <div className="mt-2 flex items-center justify-between gap-3 sm:hidden">
           <span className={dish.price ? "font-serif text-[18px] text-gold-200" : "font-body text-[11.5px] text-ink-soft"}>
@@ -111,6 +137,8 @@ export default function MenuTabs() {
   const cat = menu[idx];
   const prev = menu[idx - 1];
   const next = menu[idx + 1];
+  const cards = cat.items.filter((d): d is Dish & { image: string } => !!d.image);
+  const rest = cat.items.filter((d) => !d.image);
 
   const scrollTabs = (dir: number) => {
     const el = tabRefs.current[menu[0].id]?.parentElement;
@@ -225,42 +253,35 @@ export default function MenuTabs() {
                   {cat.items.some((d) => !d.price) && (
                     <p className="mb-3 font-body text-[12px] uppercase tracking-[0.18em] text-ink-soft">Цены уточните по телефону</p>
                   )}
-                  <ul className={`grid gap-x-8 ${cat.items.length > 9 ? "sm:grid-cols-2" : ""}`}>
-                    {cat.items.map((dish, i) => (
-                      <motion.li
-                        key={dish.name}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: Math.min(i, 12) * 0.035 }}
-                        className="flex items-baseline gap-3 border-b border-gold-500/15 py-3"
-                      >
-                        <span className="min-w-0">
-                          <span className="block font-serif text-[19px] leading-tight text-ink">{dish.name}</span>
-                          {dish.desc && <span className="mt-0.5 block text-[12.5px] leading-snug text-ink-muted">{dish.desc}</span>}
-                        </span>
-                        {dish.price && (
-                          <>
-                            <span className="mb-1 flex-1 border-b border-dotted border-gold-500/30" />
-                            <span className="shrink-0 whitespace-nowrap font-serif text-[17px] text-gold-200">{dish.price}</span>
-                          </>
-                        )}
-                      </motion.li>
-                    ))}
-                  </ul>
+                  <DishList items={cat.items} cols={cat.items.length > 9} />
                   <a href={site.phoneHref} className="btn-gold mt-7 w-full sm:w-fit">
                     <I.Phone size={18} /> Заказать по телефону
                   </a>
                 </div>
               </div>
             ) : (
-              <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
-                {cat.items.map((dish, i) => (
-                  <div key={dish.name} className="flex">
-                    <DishCard dish={dish} i={i} />
+              <>
+                {cards.length > 0 && (
+                  <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+                    {cards.map((dish, i) => (
+                      <div key={dish.name} className="flex">
+                        <DishCard dish={dish} i={i} />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                )}
+                {rest.length > 0 && (
+                  <div className={`rounded-md border border-gold-400/35 bg-coal-800/70 px-5 py-4 sm:px-9 sm:py-7 ${cards.length ? "mt-6 sm:mt-8" : ""}`}>
+                    {cards.length > 0 && (
+                      <p className="mb-1 font-body text-[11px] uppercase tracking-[0.22em] text-gold-200">Ещё в разделе</p>
+                    )}
+                    <DishList items={rest} cols={rest.length > 5} />
+                  </div>
+                )}
+              </>
             )}
+
+            {cat.footnote && <p className="mt-5 text-[13.5px] leading-relaxed text-ink-muted">{cat.footnote}</p>}
 
             {/* соседние категории */}
             <div className="mt-12 flex items-center justify-between gap-4 border-t border-gold-500/25 pt-6">

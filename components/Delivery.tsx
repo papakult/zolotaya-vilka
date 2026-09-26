@@ -9,7 +9,7 @@ import { site } from "@/lib/site";
 const photos = {
   big: "/images/dishes/hot-stroganoff.jpg",
   a: "/images/dishes/pasta-carbonara.jpg",
-  b: "/images/dishes/dessert-napoleon.jpg",
+  b: "/images/dishes/dessert-cheesecake.jpg",
 };
 
 const perks = [
@@ -85,7 +85,7 @@ export default function Delivery() {
             <Image src={photos.a} alt="Паста карбонара" fill sizes="(min-width:1024px) 300px, 50vw" className="object-cover" />
           </Reveal>
           <Reveal delay={0.18} className="relative aspect-[4/3] overflow-hidden rounded-md border border-gold-400/50">
-            <Image src={photos.b} alt="Торт Наполеон" fill sizes="(min-width:1024px) 300px, 50vw" className="object-cover" />
+            <Image src={photos.b} alt="Чизкейк" fill sizes="(min-width:1024px) 300px, 50vw" className="object-cover" />
           </Reveal>
         </div>
       </div>
