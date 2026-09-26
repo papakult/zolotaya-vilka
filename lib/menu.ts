@@ -1,21 +1,27 @@
 /**
- * Меню ресторана.
- * Цены: завтраки, салаты, паста, горячее, десерты и напитки из утверждённых макетов.
- * Хинкали, первые блюда, мангал, закуски, снеки, бургеры, шаурма и соусы из ТЗ этапа 3,
- * цены для них ещё не переданы: пустая строка price показывает «Цену уточните по телефону».
- * Чтобы добавить цену, впишите её в price, например "450 ₽".
- * Фото блюд лежат в public/images/dishes/.
+ * Меню ресторана «Золотая вилка».
+ * Источник: Золотая_вилка_меню.txt (расшифровка бумажного меню ресторана).
+ *
+ * Как устроено:
+ * - image есть → блюдо показывается карточкой с фото;
+ * - image нет → блюдо стоит в списке «Ещё в разделе» под карточками;
+ * - compact: true → весь раздел списком рядом с одной фотографией (закуски, снеки, бар, соусы);
+ * - пустой price → «цена по телефону» (позиции, где цена в бумажном меню не читается).
+ *
+ * Чтобы добавить фото блюду: положите файл в public/images/dishes/ и впишите image: d("имя-файла").
  */
-export type Dish = { name: string; desc: string; price: string; image: string };
+export type Dish = { name: string; desc?: string; price: string; image?: string };
 export type Category = {
   id: string;
   title: string;
   note?: string;
-  /** фото категории: обложка для компактного списка */
+  /** фото раздела для компактного списка */
   cover: string;
-  /** компактный список без фото у каждой позиции (соусы) */
+  /** весь раздел списком без карточек */
   compact?: boolean;
   items: Dish[];
+  /** строка под разделом, например добавки к мороженому */
+  footnote?: string;
 };
 
 const d = (slug: string) => `/images/dishes/${slug}.jpg`;
@@ -24,15 +30,23 @@ export const menu: Category[] = [
   {
     id: "breakfast",
     title: "Завтраки",
-    note: "с 8:00 до 12:00",
     cover: d("breakfast-syrniki"),
     items: [
-      { name: "Овсяная каша", desc: "На молоке или воде, с сезонными ягодами", price: "320 ₽", image: d("breakfast-oatmeal") },
-      { name: "Домашние сырники", desc: "Со сметаной и ягодным соусом", price: "420 ₽", image: d("breakfast-syrniki") },
-      { name: "Яичница с беконом", desc: "Из фермерских яиц, с томатами и зеленью", price: "450 ₽", image: d("breakfast-eggs-bacon") },
-      { name: "Блины со сгущенкой", desc: "Тонкие блинчики, как у бабушки", price: "350 ₽", image: d("breakfast-blini") },
-      { name: "Омлет с овощами", desc: "Пышный омлет с сезонными овощами", price: "320 ₽", image: d("breakfast-omelette") },
-      { name: "Английский завтрак", desc: "Яйцо, бекон, овощи, тосты", price: "450 ₽", image: d("breakfast-english") },
+      { name: "Сырники с вареньем, сгущёнкой и фруктами", desc: "Домашние сырники из творога", price: "530 ₽", image: d("breakfast-syrniki") },
+      { name: "Шакшука", desc: "Яйца, томлённые в пряном томатном соусе с перцем", price: "450 ₽", image: d("breakfast-shakshuka") },
+      { name: "Омлет из двух яиц со шпинатом и сладким перцем", desc: "Пышный омлет с овощами", price: "450 ₽", image: d("breakfast-omelette") },
+      { name: "Каша овсяная с фруктами", desc: "На молоке, со свежими фруктами", price: "190 ₽", image: d("breakfast-oatmeal") },
+      { name: "Яичница из трёх яиц с сыром и зеленью", price: "150 ₽" },
+      { name: "Омлет с сыром и зеленью", price: "230 ₽" },
+      { name: "Скрембл с креветками и брокколи", price: "470 ₽" },
+      { name: "Скрембл с креветками и авокадо", price: "900 ₽" },
+      { name: "Драники картофельные со сметаной и зелёным луком", price: "400 ₽" },
+      { name: "Сырники с карамелью и фруктами", price: "530 ₽" },
+      { name: "Каша рисовая с фруктами", price: "190 ₽" },
+      { name: "Каша овсяная с чёрной смородиной и мороженым", price: "300 ₽" },
+      { name: "Завтрак «Золотая Вилка» №1", desc: "Омлет из 3 яиц, мини-цезарь, черри, куриное филе, пармезан, сухарики", price: "800 ₽" },
+      { name: "Завтрак «Золотая Вилка» №2", desc: "Омлет из 3 яиц, помидор, огурец, перец, фета, маслины, мини-фокачча, заправка на зелени", price: "750 ₽" },
+      { name: "Завтрак «Золотая Вилка» №3", desc: "Яйцо пашот 2 шт., драники, баварские сосиски, бекон, сырный соус, крутоны, помидор", price: "1100 ₽" },
     ],
   },
   {
@@ -40,22 +54,23 @@ export const menu: Category[] = [
     title: "Хинкали",
     cover: d("cat-khinkali"),
     items: [
-      { name: "Хинкали с бараниной", desc: "Сочная рубленая баранина, пряный бульон внутри", price: "", image: d("khinkali-lamb") },
-      { name: "Хинкали с говядиной", desc: "Классическая начинка из говядины с зеленью и перцем", price: "", image: d("cat-khinkali") },
+      { name: "Хинкали с бараниной", desc: "Сочная рубленая баранина, пряный бульон внутри", price: "100 ₽", image: d("khinkali-lamb") },
+      { name: "Хинкали с говядиной", desc: "Классическая начинка из говядины с зеленью и перцем", price: "100 ₽", image: d("cat-khinkali") },
     ],
+    footnote: "Цена за 1 шт.",
   },
   {
     id: "salads",
     title: "Салаты",
     cover: d("salad-caesar"),
     items: [
-      { name: "Цезарь с курицей", desc: "Классический рецепт, сыр пармезан, домашний соус", price: "520 ₽", image: d("salad-caesar") },
-      { name: "Греческий", desc: "Свежие овощи, сыр фета, оливковое масло", price: "490 ₽", image: d("salad-greek") },
-      { name: "Тёплый салат с говядиной", desc: "Обжаренная вырезка, микс-салат, томат черри, авторский соус", price: "590 ₽", image: d("salad-warm-beef") },
-      { name: "Салат с печёной свёклой", desc: "Козий сыр, орехи, руккола", price: "480 ₽", image: d("salad-beetroot") },
-      { name: "Салат из свежих овощей", desc: "С ароматной заправкой", price: "290 ₽", image: d("salad-fresh") },
-      { name: "Тёплый салат с куриной печенью", desc: "Нежная печень, микс-салат, тёплая заправка", price: "360 ₽", image: d("salad-liver") },
-      { name: "Салат с тунцом", desc: "С перепелиными яйцами", price: "380 ₽", image: d("salad-tuna") },
+      { name: "Цезарь с курицей", desc: "Романо, курица, пармезан, гренки, соус цезарь", price: "430 ₽", image: d("salad-caesar") },
+      { name: "Салат греческий", desc: "Свежие овощи, фета, маслины, оливковое масло", price: "420 ₽", image: d("salad-greek") },
+      { name: "Цезарь с лососем", price: "670 ₽" },
+      { name: "Цезарь с креветками", price: "650 ₽" },
+      { name: "Салат из баклажанов", price: "390 ₽" },
+      { name: "Салат «Чука» с ореховым соусом", price: "400 ₽" },
+      { name: "Коул слоу", price: "360 ₽" },
     ],
   },
   {
@@ -63,13 +78,13 @@ export const menu: Category[] = [
     title: "Первые блюда",
     cover: d("cat-soups"),
     items: [
-      { name: "Суп-лапша", desc: "Куриный бульон, домашняя лапша, зелень", price: "", image: d("soup-noodle") },
-      { name: "Грибной крем-суп", desc: "Нежный суп-пюре из шампиньонов со сливками", price: "", image: d("cat-soups") },
-      { name: "Тыквенный крем-суп", desc: "Бархатная тыква, сливки, тыквенные семечки", price: "", image: d("soup-pumpkin") },
-      { name: "Борщ", desc: "Со сметаной, чесноком и чёрным хлебом", price: "", image: d("soup-borscht") },
-      { name: "Мисо-суп", desc: "Японский суп с тофу, водорослями и зелёным луком", price: "", image: d("soup-miso") },
-      { name: "Том Ям", desc: "Острый тайский суп с креветками и грибами", price: "", image: d("soup-tomyum") },
-      { name: "Сырный суп с креветками", desc: "Сливочный сырный суп, креветки, гренки", price: "", image: d("soup-cheese-shrimp") },
+      { name: "Суп-лапша с домашней курицей", desc: "Куриный бульон, домашняя лапша, зелень", price: "300 ₽", image: d("soup-noodle") },
+      { name: "Грибной крем-суп", desc: "Нежный суп-пюре из шампиньонов со сливками", price: "320 ₽", image: d("cat-soups") },
+      { name: "Тыквенный крем-суп с сыром пармезан", desc: "Бархатная тыква, сливки, пармезан", price: "410 ₽", image: d("soup-pumpkin") },
+      { name: "Борщ", desc: "Со сметаной, чесноком и чёрным хлебом", price: "350 ₽", image: d("soup-borscht") },
+      { name: "Мисо-суп", desc: "Японский суп с тофу, водорослями и зелёным луком", price: "450 ₽", image: d("soup-miso") },
+      { name: "Том ям", desc: "Острый тайский суп с креветками и грибами", price: "940 ₽", image: d("soup-tomyum") },
+      { name: "Сырный суп с креветками", desc: "Сливочный сырный суп, креветки, гренки", price: "520 ₽", image: d("soup-cheese-shrimp") },
     ],
   },
   {
@@ -77,24 +92,49 @@ export const menu: Category[] = [
     title: "Паста",
     cover: d("pasta-carbonara"),
     items: [
-      { name: "Карбонара", desc: "Классическая паста с беконом, сливочным соусом и пармезаном", price: "560 ₽", image: d("pasta-carbonara") },
-      { name: "Паста с морепродуктами", desc: "Креветки, кальмары, томаты, сливочный соус", price: "680 ₽", image: d("pasta-seafood") },
-      { name: "Паста с белыми грибами", desc: "В сливочном соусе с зеленью", price: "620 ₽", image: d("pasta-porcini") },
-      { name: "Паста Болоньезе", desc: "С итальянским томатным соусом и пармезаном", price: "590 ₽", image: d("pasta-bolognese") },
+      { name: "Карбонара с беконом", desc: "Сливочный соус, бекон, пармезан", price: "400 ₽", image: d("pasta-carbonara") },
+      { name: "Фетучини с курицей и грибами", desc: "В сливочном соусе", price: "430 ₽", image: d("pasta-porcini") },
+      { name: "Фетучини с креветками", desc: "Креветки, томаты, сливочный соус", price: "580 ₽", image: d("pasta-seafood") },
+      { name: "Карбонара с копчёной индейкой", price: "400 ₽" },
     ],
   },
   {
     id: "hot",
     title: "Горячие блюда",
-    cover: d("hot-salmon"),
+    cover: d("hot-beef-cheeks"),
     items: [
-      { name: "Куриная грудка в сливочном соусе", desc: "С грибами и картофельным пюре", price: "580 ₽", image: d("hot-chicken-cream") },
-      { name: "Бефстроганов", desc: "С нежной говядиной и пюре", price: "650 ₽", image: d("hot-stroganoff") },
-      { name: "Лосось на гриле", desc: "С овощами и лимонным соусом", price: "790 ₽", image: d("hot-salmon") },
-      { name: "Домашние котлеты", desc: "Из говядины и свинины, с картофельным пюре и солеными огурчиками", price: "540 ₽", image: d("hot-cutlets") },
-      { name: "Свинина по-домашнему", desc: "С овощами", price: "480 ₽", image: d("hot-pork") },
-      { name: "Рыба дня", desc: "С сезонными овощами", price: "490 ₽", image: d("hot-fish") },
-      { name: "Пельмени домашние", desc: "Лепим сами, подаём со сметаной", price: "360 ₽", image: d("hot-pelmeni") },
+      { name: "Говяжьи щёчки с картофельным пюре", desc: "Томлёные до мягкости, в густом соусе", price: "740 ₽", image: d("hot-beef-cheeks") },
+      { name: "Стейк рибай", desc: "Мраморная говядина на гриле", price: "1200 ₽ / 100 г", image: d("hot-ribeye") },
+      { name: "Мидии в сливочно-чесночном соусе", desc: "Подаём с хлебом", price: "800 ₽", image: d("hot-mussels") },
+      { name: "Бефстроганов с пюре", desc: "Нежная говядина в сливочном соусе", price: "600 ₽", image: d("hot-stroganoff") },
+      { name: "Стейк из сёмги", desc: "На гриле, с лимоном", price: "550 ₽ / 100 г", image: d("hot-salmon") },
+      { name: "Форель на гриле", desc: "Целиком, с лимоном и травами", price: "280 ₽ / 100 г", image: d("grill-trout") },
+      { name: "Судак в сливочном соусе с брокколи", price: "580 ₽", image: d("hot-fish") },
+      { name: "Шницель куриный с салатом", price: "690 ₽" },
+      { name: "Мидии в соусе том ям", price: "830 ₽" },
+      { name: "Мидии в соусе дор блю", price: "850 ₽" },
+      { name: "Стейк куриный с беконом и сыром", price: "240 ₽ / 100 г" },
+      { name: "Бриошь с креветкой и соусом", price: "690 ₽" },
+      { name: "Свиные рёбрышки с соусом барбекю", price: "650 ₽" },
+      { name: "Сибас на гриле", desc: "Цена за 100 г", price: "" },
+      { name: "Дорадо на гриле", desc: "Цена за 100 г", price: "" },
+      { name: "Филе сибаса, запечённое с овощами", price: "" },
+      { name: "Филе дорадо, запечённое с овощами", price: "" },
+      { name: "Кесадилья с курицей и томатами", price: "740 ₽" },
+      { name: "Удон с курицей", price: "480 ₽" },
+      { name: "Удон с морепродуктами", price: "580 ₽" },
+      { name: "Шурпа", desc: "Порция от 250 г", price: "230 ₽ / 100 г" },
+    ],
+  },
+  {
+    id: "sides",
+    title: "Гарниры",
+    cover: d("grill-vegetables"),
+    items: [
+      { name: "Овощи гриль", desc: "Кабачок, перец, баклажан, томаты", price: "390 ₽", image: d("grill-vegetables") },
+      { name: "Картофельное пюре", price: "200 ₽" },
+      { name: "Рис отварной с овощами", price: "180 ₽" },
+      { name: "Брокколи в панировке с соусом", price: "320 ₽" },
     ],
   },
   {
@@ -102,49 +142,53 @@ export const menu: Category[] = [
     title: "Мангал",
     cover: d("cat-grill"),
     items: [
-      { name: "Шампиньоны", desc: "Шампиньоны на углях с травами", price: "", image: d("grill-mushrooms") },
-      { name: "Овощи", desc: "Кабачок, перец, баклажан и томаты на мангале", price: "", image: d("grill-vegetables") },
-      { name: "Куриное филе", desc: "Нежное филе в маринаде, приготовленное на углях", price: "", image: d("grill-chicken") },
-      { name: "Крылья", desc: "Куриные крылья с хрустящей корочкой", price: "", image: d("grill-wings") },
-      { name: "Свиная шея", desc: "Сочный шашлык из свиной шеи с маринованным луком", price: "", image: d("grill-pork") },
-      { name: "Люля курица", desc: "Люля-кебаб из курицы на лаваше с зеленью", price: "", image: d("grill-lula-chicken") },
-      { name: "Люля говядина", desc: "Люля-кебаб из говядины с луком и сумахом", price: "", image: d("grill-lula-beef") },
-      { name: "Люля баранина", desc: "Люля-кебаб из баранины с зеленью", price: "", image: d("grill-lula-lamb") },
-      { name: "Форель", desc: "Форель целиком на углях с лимоном", price: "", image: d("grill-trout") },
-      { name: "Сёмга", desc: "Стейк сёмги на мангале с лимоном", price: "", image: d("hot-salmon") },
-      { name: "Каре баранины", desc: "Каре на косточке с розмарином", price: "", image: d("grill-lamb-rack") },
-      { name: "Мякоть баранины", desc: "Шашлык из мякоти баранины", price: "", image: d("cat-grill") },
+      { name: "Свиная шея", desc: "Сочный шашлык с маринованным луком", price: "260 ₽ / 100 г", image: d("grill-pork") },
+      { name: "Каре баранины", desc: "На косточке, с розмарином", price: "600 ₽ / 100 г", image: d("grill-lamb-rack") },
+      { name: "Мякоть баранины", desc: "Шашлык из мякоти баранины", price: "450 ₽ / 100 г", image: d("cat-grill") },
+      { name: "Куриное филе", desc: "Нежное филе в маринаде на углях", price: "230 ₽ / 100 г", image: d("grill-chicken") },
+      { name: "Куриные крылья", desc: "С хрустящей корочкой", price: "230 ₽ / 100 г", image: d("grill-wings") },
+      { name: "Люля-кебаб из курицы", desc: "На лаваше с зеленью", price: "230 ₽ / 100 г", image: d("grill-lula-chicken") },
+      { name: "Люля-кебаб из говядины", desc: "С луком и сумахом", price: "250 ₽ / 100 г", image: d("grill-lula-beef") },
+      { name: "Люля-кебаб из баранины", desc: "С зеленью и гранатом", price: "390 ₽ / 100 г", image: d("grill-lula-lamb") },
+      { name: "Форель", desc: "Целиком на углях", price: "270 ₽ / 100 г", image: d("grill-trout") },
+      { name: "Сёмга", desc: "Стейк на углях с лимоном", price: "570 ₽ / 100 г", image: d("hot-salmon") },
+      { name: "Шампиньоны", desc: "На углях с травами", price: "160 ₽ / 100 г", image: d("grill-mushrooms") },
+      { name: "Овощи на мангале ассорти", desc: "Кабачок, перец, баклажан, томаты", price: "600 ₽", image: d("grill-vegetables") },
     ],
   },
   {
     id: "starters",
     title: "Закуски",
-    cover: d("cat-starters"), compact: true,
+    cover: d("cat-starters"),
+    compact: true,
     items: [
-      { name: "Сёмга", desc: "Слабосолёная сёмга с лимоном и укропом", price: "", image: d("cat-starters") },
-      { name: "Овощная тарелка", desc: "Свежие огурцы, томаты, перец, редис, зелень", price: "", image: d("cat-starters") },
-      { name: "Сырная тарелка", desc: "Ассорти сыров к вину и к столу", price: "", image: d("cat-starters") },
-      { name: "Тигровые креветки", desc: "Крупные креветки с чесночным маслом", price: "", image: d("cat-starters") },
-      { name: "Креветки отварные", desc: "С лимоном и соусом", price: "", image: d("cat-starters") },
-      { name: "Креветки жареные", desc: "Обжаренные с чесноком и зеленью", price: "", image: d("cat-starters") },
-      { name: "Соленья", desc: "Домашние огурцы, томаты и капуста", price: "", image: d("cat-starters") },
-      { name: "Маслины/оливки", desc: "К вину и к закускам", price: "", image: d("cat-starters") },
+      { name: "Сёмга слабосолёная", desc: "70 г", price: "400 ₽" },
+      { name: "Овощная тарелка", price: "380 ₽" },
+      { name: "Сырная тарелка", price: "580 ₽" },
+      { name: "Креветки тигровые на гриле", price: "580 ₽" },
+      { name: "Креветки отварные", price: "550 ₽" },
+      { name: "Креветки жареные", price: "600 ₽" },
+      { name: "Соленья", price: "390 ₽" },
+      { name: "Маслины / оливки", desc: "100 г", price: "290 ₽" },
+      { name: "Хлебная корзина", price: "165 ₽" },
     ],
   },
   {
     id: "snacks",
     title: "Снеки",
-    cover: d("cat-snacks"), compact: true,
+    cover: d("cat-snacks"),
+    compact: true,
     items: [
-      { name: "Сырные палочки", desc: "Хрустящие палочки с тянущимся сыром", price: "", image: d("cat-snacks") },
-      { name: "Наггетсы", desc: "Куриные наггетсы с соусом", price: "", image: d("cat-snacks") },
-      { name: "Чесночные гренки", desc: "Хрустящие гренки с чесноком", price: "", image: d("cat-snacks") },
-      { name: "Картофельные дольки", desc: "Запечённые дольки со специями", price: "", image: d("cat-snacks") },
-      { name: "Луковые кольца", desc: "Золотистые кольца в хрустящем кляре", price: "", image: d("cat-snacks") },
-      { name: "Жареные пельмени", desc: "Обжаренные до хруста, со сметаной", price: "", image: d("cat-snacks") },
-      { name: "Креветка темпура", desc: "Креветки в лёгком кляре темпура", price: "", image: d("cat-snacks") },
-      { name: "Батат фри", desc: "Сладкий картофель фри", price: "", image: d("cat-snacks") },
-      { name: "Картофель фри", desc: "Классический картофель фри", price: "", image: d("cat-snacks") },
+      { name: "Пивной сет", desc: "Наггетсы, чесночные гренки, фри, луковые кольца, сырные палочки; соусы сырный, кетчуп, сладкий чили", price: "1600 ₽" },
+      { name: "Сырные палочки", price: "250 ₽" },
+      { name: "Наггетсы", price: "220 ₽" },
+      { name: "Чесночные гренки", price: "320 ₽" },
+      { name: "Картофельные дольки", price: "250 ₽" },
+      { name: "Луковые кольца", price: "220 ₽" },
+      { name: "Пельмени жареные с чесночным соусом", price: "320 ₽" },
+      { name: "Креветка темпура с соусом сладкий чили", price: "800 ₽" },
+      { name: "Батат фри", price: "270 ₽" },
+      { name: "Картофель фри", price: "220 ₽" },
     ],
   },
   {
@@ -152,9 +196,9 @@ export const menu: Category[] = [
     title: "Бургеры",
     cover: d("cat-burgers"),
     items: [
-      { name: "Бургер с говядиной", desc: "Говяжья котлета, сыр, овощи, соус", price: "", image: d("cat-burgers") },
-      { name: "Бургер с курицей", desc: "Хрустящая курица, салат, томат, соус", price: "", image: d("burger-chicken") },
-      { name: "Бургер с тигровой креветкой", desc: "Креветки в хрустящей панировке, салат, соус", price: "", image: d("burger-shrimp") },
+      { name: "Бургер с говядиной", desc: "Говяжья котлета, сыр, овощи, соус", price: "630 ₽", image: d("cat-burgers") },
+      { name: "Бургер с курицей", desc: "Хрустящая курица, салат, томат, соус", price: "500 ₽", image: d("burger-chicken") },
+      { name: "Бургер с тигровой креветкой", desc: "Креветки в хрустящей панировке, салат, соус", price: "730 ₽", image: d("burger-shrimp") },
     ],
   },
   {
@@ -162,10 +206,10 @@ export const menu: Category[] = [
     title: "Шаурма",
     cover: d("cat-shawarma"),
     items: [
-      { name: "Шаурма с говядиной", desc: "Говядина, свежие овощи, соус в лаваше", price: "", image: d("shawarma-beef") },
-      { name: "Шаурма с курицей", desc: "Курица, овощи, соус в лаваше", price: "", image: d("cat-shawarma") },
-      { name: "Шаурма с лососем", desc: "Лосось, огурец, зелень в лаваше", price: "", image: d("shawarma-salmon") },
-      { name: "Вегетарианская шаурма", desc: "Овощи на гриле, свежий салат, соус", price: "", image: d("shawarma-veg") },
+      { name: "Шаурма с говядиной", desc: "Говядина, свежие овощи, соус в лаваше", price: "450 ₽", image: d("shawarma-beef") },
+      { name: "Шаурма с курицей", desc: "Курица, овощи, соус в лаваше", price: "420 ₽", image: d("cat-shawarma") },
+      { name: "Шаурма с лососем", desc: "Лосось, огурец, зелень в лаваше", price: "700 ₽", image: d("shawarma-salmon") },
+      { name: "Вегетарианская шаурма", desc: "Овощи на гриле, свежий салат, соус", price: "400 ₽", image: d("shawarma-veg") },
     ],
   },
   {
@@ -173,57 +217,74 @@ export const menu: Category[] = [
     title: "Десерты",
     cover: d("dessert-cheesecake"),
     items: [
-      { name: "Наполеон", desc: "Классический, с заварным кремом", price: "340 ₽", image: d("dessert-napoleon") },
-      { name: "Чизкейк", desc: "Нежный, с ягодным соусом", price: "380 ₽", image: d("dessert-cheesecake") },
-      { name: "Тирамису", desc: "Воздушный итальянский десерт", price: "420 ₽", image: d("dessert-tiramisu") },
-      { name: "Мороженое", desc: "Ванильное, шоколадное, с ягодами", price: "280 ₽", image: d("dessert-icecream") },
-      { name: "Шоколадный фондан", desc: "Горячий шоколадный кекс с жидкой серединой", price: "350 ₽", image: d("dessert-fondant") },
+      { name: "Чизкейк «Нью-Йорк»", desc: "Классический сливочный чизкейк", price: "270 ₽", image: d("dessert-cheesecake") },
+      { name: "Мороженое", desc: "С добавками на выбор", price: "", image: d("dessert-icecream") },
+      { name: "Чизкейк шоколадный", price: "270 ₽" },
+      { name: "Торт-мусс «Три шоколада»", price: "320 ₽" },
+      { name: "Торт «Эстерхази» ореховый", price: "330 ₽" },
+      { name: "Торт бисквитный молочный", price: "310 ₽" },
     ],
+    footnote: "Добавки к мороженому: топинг шоколад +50 ₽, карамель +50 ₽, грецкий орех +50 ₽, фрукты +70 ₽",
   },
   {
     id: "drinks",
     title: "Бар и напитки",
-    cover: d("drink-lemonade"),
+    cover: d("drink-coffee"),
+    compact: true,
     items: [
-      { name: "Авторский чай", desc: "Облепиховый, имбирный, травяной", price: "300 ₽", image: d("drink-author-tea") },
-      { name: "Классический чай", desc: "Чёрный, зелёный, с добавками", price: "220 ₽", image: d("drink-classic-tea") },
-      { name: "Кофе", desc: "Эспрессо / Американо / Капучино / Латте", price: "от 180 ₽", image: d("drink-coffee") },
-      { name: "Домашние лимонады", desc: "Цитрусовый, ягодный, мятный", price: "350 ₽", image: d("drink-lemonade") },
-      { name: "Свежевыжатые соки", desc: "Апельсин / Грейпфрут / Яблоко", price: "320 ₽", image: d("drink-juice") },
+      { name: "Безалкогольный коктейль «Классический»", price: "350 ₽" },
+      { name: "Коктейль клубнично-малиновый", price: "350 ₽" },
+      { name: "Коктейль «Пина колада»", price: "400 ₽" },
+      { name: "Коктейль «Голубая лагуна»", price: "350 ₽" },
+      { name: "Кофе по-восточному", price: "150 ₽" },
+      { name: "Эспрессо", desc: "30 мл", price: "200 ₽" },
+      { name: "Американо", price: "200 ₽" },
+      { name: "Капучино", price: "230 ₽" },
+      { name: "Латте", price: "270 ₽" },
+      { name: "Морс", desc: "1 л", price: "850 ₽" },
+      { name: "Сок в ассортименте", desc: "0,2 л", price: "150 ₽" },
+      { name: "Боржоми газированная", desc: "0,5 л", price: "250 ₽" },
+      { name: "Боржоми без газа", desc: "0,5 л", price: "250 ₽" },
+      { name: "Pepsi-Cola", price: "150 ₽" },
+      { name: "7UP", price: "150 ₽" },
     ],
   },
   {
     id: "sauces",
     title: "Соусы",
-    cover: d("cat-sauces"), compact: true,
+    cover: d("cat-sauces"),
+    compact: true,
     items: [
-      { name: "Сметанно-чесночный", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Грузинский", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Кисло-сладкий", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Цезарь", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Сырный", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Спайси", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Барбекю", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Сметана", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Майонез", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Кетчуп", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Ореховый", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Хрен", desc: "", price: "", image: d("cat-sauces") },
-      { name: "Горчица", desc: "", price: "", image: d("cat-sauces") },
+      { name: "Сметанно-чесночный", price: "100 ₽" },
+      { name: "Грузинский", price: "100 ₽" },
+      { name: "Кисло-сладкий чили", price: "100 ₽" },
+      { name: "Цезарь", price: "100 ₽" },
+      { name: "Сырный", price: "100 ₽" },
+      { name: "Спайси", price: "100 ₽" },
+      { name: "Барбекю", price: "100 ₽" },
+      { name: "Ореховый", price: "100 ₽" },
+      { name: "Кетчуп", price: "100 ₽" },
+      { name: "Хрен", price: "100 ₽" },
+      { name: "Горчица", price: "100 ₽" },
+      { name: "Сметана", price: "80 ₽" },
+      { name: "Майонез", price: "80 ₽" },
     ],
   },
 ];
 
 export const chefPick = {
-  title: "Тёплый салат с говядиной",
-  desc: "Сочная говядина, свежие овощи, микс-салат и авторский соус",
-  price: "590 ₽",
-  image: d("salad-warm-beef"),
+  title: "Говяжьи щёчки с картофельным пюре",
+  desc: "Томлёные до мягкости, в густом соусе, с нежным пюре",
+  price: "740 ₽",
+  image: d("hot-beef-cheeks"),
 };
 
-/** минимальная цена категории: «от 480 ₽» */
+/** минимальная цена за порцию (цены за 100 г не учитываем) */
 export function fromPrice(cat: Category) {
-  const nums = cat.items.map((i) => parseInt(i.price.replace(/\D/g, ""), 10)).filter(Boolean);
+  const nums = cat.items
+    .filter((i) => i.price && !i.price.includes("/"))
+    .map((i) => parseInt(i.price.replace(/\D/g, ""), 10))
+    .filter(Boolean);
   return nums.length ? `от ${Math.min(...nums)} ₽` : "";
 }
 
@@ -235,6 +296,6 @@ const pick = (id: string, desc: string) => {
 export const featured = [
   pick("salads", "Свежие и сытные"),
   pick("hot", "Классика и авторские рецепты"),
-  pick("pasta", "Сливочная, томатная, с морепродуктами"),
+  pick("grill", "Шашлык и люля на углях"),
   pick("desserts", "Сладкие моменты"),
 ];
