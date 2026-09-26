@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, PT_Serif, Marck_Script } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
 
 const serif = Cormorant_Garamond({
   subsets: ["latin", "cyrillic"],
@@ -25,16 +27,21 @@ const script = Marck_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Золотая вилка | домашний ресторан в Сочи",
+  metadataBase: new URL(SITE_URL),
+  title: "Золотая Вилка — домашний ресторан в Сочи, Мацеста",
   description:
-    "Домашняя кухня, уютная обстановка и спокойные встречи в самом сердце Сочи. Бронирование столиков и доставка по звонку.",
+    "Домашняя кухня, уютная атмосфера, доставка и бронирование столиков. Ресторан «Золотая Вилка», Верхняя Мацеста, Сочи.",
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
   openGraph: {
-    title: "Золотая вилка | домашний ресторан",
-    description: "Домашняя кухня и тёплая атмосфера в Сочи.",
-    images: ["/images/interior/hall-tables.jpg"],
+    title: "Золотая Вилка — домашний ресторан в Сочи, Мацеста",
+    description: "Домашняя кухня, уютная атмосфера, доставка и бронирование столиков в Сочи.",
+    url: "/",
+    siteName: "Золотая Вилка",
     locale: "ru_RU",
     type: "website",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
@@ -44,7 +51,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ru" className={`${serif.variable} ${body.variable} ${script.variable}`}>
-      <body className="font-body">{children}</body>
+      <body className="font-body">
+        <JsonLd />
+        {children}
+      </body>
     </html>
   );
 }
