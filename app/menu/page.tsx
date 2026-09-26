@@ -5,8 +5,18 @@ import MenuPage from "@/components/MenuPage";
 import { Footer } from "@/components/Sections";
 
 export const metadata: Metadata = {
-  title: "Меню | Золотая вилка",
-  description: "Завтраки, салаты, горячие блюда, паста, десерты и напитки домашнего ресторана «Золотая вилка» в Сочи.",
+  title: "Меню ресторана «Золотая Вилка» — Сочи",
+  description:
+    "Завтраки, салаты, горячие блюда, мангал, десерты и доставка. Полное меню ресторана «Золотая Вилка» в Сочи.",
+  alternates: { canonical: "/menu" },
+  openGraph: {
+    title: "Меню ресторана «Золотая Вилка» — Сочи",
+    description: "Завтраки, салаты, горячие блюда, мангал, десерты и доставка. Полное меню ресторана «Золотая Вилка» в Сочи.",
+    url: "/menu",
+    siteName: "Золотая Вилка",
+    locale: "ru_RU",
+    type: "website",
+  },
 };
 
 export default function Menu() {
