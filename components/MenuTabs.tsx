@@ -18,31 +18,46 @@ function DishCard({ dish, i }: { dish: Dish; i: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease, delay: Math.min(i, 8) * 0.06 }}
       whileHover={{ y: -4 }}
-      className="group flex w-full flex-col overflow-hidden rounded-md border border-gold-400/35 bg-coal-800/80 transition duration-500 hover:border-gold-300/70 hover:shadow-card"
+      className="group flex w-full flex-row overflow-hidden rounded-md border border-gold-400/35 bg-coal-800/80 transition duration-500 hover:border-gold-300/70 hover:shadow-card sm:flex-col"
     >
-      <div className="relative aspect-[4/3] overflow-hidden">
+      {/* на телефоне фото слева квадратом, с sm и выше сверху на всю ширину */}
+      <div className="relative aspect-square w-[118px] shrink-0 overflow-hidden sm:aspect-[4/3] sm:w-full">
         <Image
           src={dish.image}
           alt={dish.name}
           fill
-          sizes="(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw"
+          sizes="(min-width:1024px) 380px, (min-width:640px) 50vw, 118px"
           className="object-cover transition duration-[1.2s] ease-out group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-coal-900/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 hidden bg-gradient-to-t from-coal-900/60 via-transparent to-transparent sm:block" />
       </div>
-      <div className="flex flex-1 flex-col p-5 sm:p-6">
+      <div className="flex min-w-0 flex-1 flex-col px-3.5 py-3 sm:p-6">
         <div className="flex items-start justify-between gap-4">
-          <h3 className="font-serif text-[22px] leading-[1.1] text-[#f7f1e8]">{dish.name}</h3>
-          {dish.price ? (
-            <span className="shrink-0 whitespace-nowrap font-serif text-[21px] text-gold-200">{dish.price}</span>
-          ) : (
-            <span className="shrink-0 whitespace-nowrap pt-1.5 font-body text-[12px] text-ink-soft">цена по телефону</span>
+          <h3 className="font-serif text-[18px] leading-[1.1] text-[#f7f1e8] sm:text-[22px]">{dish.name}</h3>
+          {dish.price && (
+            <span className="hidden shrink-0 whitespace-nowrap font-serif text-[21px] text-gold-200 sm:inline">{dish.price}</span>
+          )}
+          {!dish.price && (
+            <span className="hidden shrink-0 whitespace-nowrap pt-1.5 font-body text-[12px] text-ink-soft sm:inline">цена по телефону</span>
           )}
         </div>
-        <p className="mt-2 flex-1 text-[14px] leading-snug text-ink-muted">{dish.desc}</p>
+        <p className="mt-1 line-clamp-2 flex-1 text-[12.5px] leading-snug text-ink-muted sm:mt-2 sm:line-clamp-none sm:text-[14px]">{dish.desc}</p>
+        {/* нижняя строка на телефоне: цена + маленькая кнопка звонка */}
+        <div className="mt-2 flex items-center justify-between gap-3 sm:hidden">
+          <span className={dish.price ? "font-serif text-[18px] text-gold-200" : "font-body text-[11.5px] text-ink-soft"}>
+            {dish.price || "цена по телефону"}
+          </span>
+          <a
+            href={site.phoneHref}
+            aria-label={`Заказать ${dish.name} по телефону`}
+            className="inline-flex h-9 items-center gap-1.5 rounded-[4px] border border-gold-300/70 px-3 font-serif text-[14px] text-ink active:bg-gold-300/15"
+          >
+            <I.Phone size={13} className="text-gold-300" /> Заказать
+          </a>
+        </div>
         <a
           href={site.phoneHref}
-          className="mt-5 inline-flex items-center justify-center gap-2 rounded-[4px] border border-gold-300/70 px-4 py-3 font-serif text-[16px] text-ink transition duration-300 hover:border-transparent hover:bg-gold-btn hover:text-coal-900 hover:shadow-gold active:scale-[0.98] [&:hover_svg]:text-coal-900"
+          className="mt-5 hidden items-center justify-center gap-2 rounded-[4px] border border-gold-300/70 px-4 py-3 font-serif text-[16px] text-ink transition duration-300 hover:border-transparent hover:bg-gold-btn hover:text-coal-900 hover:shadow-gold active:scale-[0.98] sm:inline-flex [&:hover_svg]:text-coal-900"
         >
           <I.Phone size={15} className="text-gold-300" /> Заказать по телефону
         </a>
@@ -238,7 +253,7 @@ export default function MenuTabs() {
                 </div>
               </div>
             ) : (
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+              <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
                 {cat.items.map((dish, i) => (
                   <div key={dish.name} className="flex">
                     <DishCard dish={dish} i={i} />
