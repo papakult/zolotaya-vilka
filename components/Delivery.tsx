@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { Reveal, ScriptNote } from "./Decor";
 import * as I from "./Icons";
 import { site } from "@/lib/site";
@@ -14,6 +15,8 @@ const photos = {
 const perks = [
   { icon: I.Scooter, t: "Доставка по Сочи", d: "Привезём горячим, в плотной упаковке" },
   { icon: I.Bag, t: "Самовывоз", d: "Заберите заказ в ресторане в удобное время" },
+  { icon: I.Cloche, t: "Готовим после заказа", d: "Ничего не лежит заранее: всё свежее" },
+  { icon: I.House, t: "Домашняя кухня", d: "Те же рецепты и порции, что в зале" },
   { icon: I.Phone, t: "Заказ по телефону", d: "Без корзины и онлайн-оплаты, всё решаем в разговоре" },
 ];
 
@@ -28,23 +31,30 @@ export default function Delivery() {
           <p className="eyebrow">Доставка и самовывоз</p>
           <h2 className="mt-6 font-serif text-[42px] font-medium leading-[1] text-[#f7f1e8] sm:text-[56px]">
             Любимые блюда
-            <span className="block font-normal italic text-gold-200">у вас дома</span>
+            <span className="block font-normal italic text-gold-200">с доставкой по Сочи</span>
           </h2>
           <p className="mt-6 max-w-[460px] text-[16px] leading-relaxed text-ink">
-            Та же домашняя кухня, что и в зале. Позвоните, и мы приготовим заказ к доставке по Сочи или к вашему приходу.
+            Мы готовим блюда только после вашего заказа, аккуратно упаковываем и доставляем по Сочи. Всё так же вкусно, как в ресторане.
           </p>
 
-          <ul className="mt-9 space-y-5">
-            {perks.map((p) => (
-              <li key={p.t} className="flex items-start gap-4">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gold-400/60 text-gold-300">
+          <ul className="mt-9 grid gap-5 sm:grid-cols-2 sm:gap-x-6">
+            {perks.map((p, i) => (
+              <motion.li
+                key={p.t}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.07 * i }}
+                className={`flex items-start gap-4 ${i === perks.length - 1 ? "sm:col-span-2" : ""}`}
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gold-400/60 text-gold-300 transition duration-300 group-hover:bg-gold-300/10">
                   <p.icon size={22} strokeWidth={1.3} />
                 </span>
                 <span>
                   <span className="block font-serif text-[20px] leading-tight text-ink">{p.t}</span>
                   <span className="mt-0.5 block text-[13.5px] text-ink-muted">{p.d}</span>
                 </span>
-              </li>
+              </motion.li>
             ))}
           </ul>
 

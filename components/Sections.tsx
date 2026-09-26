@@ -63,11 +63,11 @@ export function Quote() {
       <div className="grid md:grid-cols-[1.35fr_1fr]">
         <div className="relative min-h-[300px] sm:min-h-[380px] md:min-h-[430px]">
           <Image
-            src={img.terrace}
-            alt="Летняя терраса ресторана с деревянной отделкой"
+            src={img.facade}
+            alt="Фасад и летняя терраса ресторана «Золотая вилка»"
             fill
             sizes="(min-width:768px) 60vw, 100vw"
-            className="object-cover object-[35%_center]"
+            className="object-cover object-[60%_center]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-coal-900 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-coal-900" />
           <div className="absolute inset-0 bg-coal-900/15" />
@@ -76,9 +76,9 @@ export function Quote() {
           <div className="md:-ml-10">
             <span className="font-serif text-[64px] leading-none text-gold-300">“</span>
             <blockquote className="-mt-4 font-serif text-[30px] italic leading-[1.25] text-[#f7f1e8] sm:text-[34px]">
-              Хорошая еда
+              Домашняя кухня.
               <br />
-              собирает хороших людей
+              Настоящие встречи.
             </blockquote>
             <span className="mt-8 block h-px w-10 bg-gold-300" />
             <p className="mt-6 font-body text-[13px] tracking-[0.12em] text-ink-muted">Золотая вилка</p>
@@ -122,7 +122,7 @@ export function MenuLight() {
                 <div className="relative aspect-[4/4.6] overflow-hidden">
                   <Image
                     src={c.image}
-                    alt={`${c.title}: фото появится позже`}
+                    alt={c.title}
                     fill
                     sizes="(min-width:768px) 200px, 50vw"
                     className="object-cover transition duration-700 group-hover:scale-105"
@@ -196,7 +196,7 @@ export function BookingDelivery() {
         >
           <div className="relative flex-1 p-6 sm:p-8">
             <div className="absolute -right-10 top-16 hidden h-[260px] w-[260px] overflow-hidden rounded-full border border-gold-500/30 opacity-90 sm:block">
-              <Image src={featured[2].image} alt="Фото блюда появится позже" fill sizes="260px" className="object-cover" />
+              <Image src={featured[2].image} alt="Горячее блюдо «Золотой вилки»" fill sizes="260px" className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-r from-coal-800 via-coal-800/20 to-transparent" />
             </div>
             <div className="relative">

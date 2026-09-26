@@ -15,7 +15,8 @@ function DishCard({ dish, i }: { dish: Dish; i: number }) {
     <motion.article
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease, delay: 0.06 * i }}
+      transition={{ duration: 0.55, ease, delay: Math.min(i, 8) * 0.06 }}
+      whileHover={{ y: -4 }}
       className="group flex w-full flex-col overflow-hidden rounded-md border border-gold-400/35 bg-coal-800/80 transition duration-500 hover:border-gold-300/70 hover:shadow-card"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
@@ -36,7 +37,7 @@ function DishCard({ dish, i }: { dish: Dish; i: number }) {
         <p className="mt-2 flex-1 text-[14px] leading-snug text-ink-muted">{dish.desc}</p>
         <a
           href={site.phoneHref}
-          className="mt-5 inline-flex items-center justify-center gap-2 rounded-[4px] border border-gold-300/70 px-4 py-3 font-serif text-[16px] text-ink transition hover:bg-gold-300/10"
+          className="mt-5 inline-flex items-center justify-center gap-2 rounded-[4px] border border-gold-300/70 px-4 py-3 font-serif text-[16px] text-ink transition duration-300 hover:border-transparent hover:bg-gold-btn hover:text-coal-900 hover:shadow-gold active:scale-[0.98] [&:hover_svg]:text-coal-900"
         >
           <I.Phone size={15} className="text-gold-300" /> Заказать по телефону
         </a>
@@ -86,7 +87,15 @@ export default function MenuTabs() {
     if (top < 0 || top > 260) scrollToTabs();
   };
 
-  const cat = menu.find((c) => c.id === active)!;
+  const idx = menu.findIndex((c) => c.id === active);
+  const cat = menu[idx];
+  const prev = menu[idx - 1];
+  const next = menu[idx + 1];
+
+  const scrollTabs = (dir: number) => {
+    const el = tabRefs.current[menu[0].id]?.parentElement;
+    el?.scrollBy({ left: dir * 320, behavior: "smooth" });
+  };
 
   return (
     <section className="bg-texture pb-16 lg:pb-20">
@@ -117,11 +126,25 @@ export default function MenuTabs() {
       {/* вкладки категорий */}
       <div ref={anchorRef} className="h-0" aria-hidden />
       <div ref={barRef} className="sticky top-[68px] z-30 mt-12 border-y border-gold-500/30 bg-coal-900/95 backdrop-blur-md">
-        <div className="container-x">
+        <div className="container-x relative">
+          <button
+            onClick={() => scrollTabs(-1)}
+            aria-label="Прокрутить категории влево"
+            className="absolute left-0 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gold-400/50 bg-coal-900/90 text-gold-200 transition hover:bg-gold-300/15 lg:flex"
+          >
+            <I.Chevron size={18} className="rotate-90" />
+          </button>
+          <button
+            onClick={() => scrollTabs(1)}
+            aria-label="Прокрутить категории вправо"
+            className="absolute right-0 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gold-400/50 bg-coal-900/90 text-gold-200 transition hover:bg-gold-300/15 lg:flex"
+          >
+            <I.Chevron size={18} className="-rotate-90" />
+          </button>
           <div
             role="tablist"
             aria-label="Категории меню"
-            className="-mx-5 flex gap-1 overflow-x-auto px-5 py-3 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden lg:flex-wrap lg:justify-center"
+            className="-mx-5 flex gap-1 overflow-x-auto scroll-smooth px-5 py-3 [mask-image:linear-gradient(90deg,transparent,black_24px,black_calc(100%-24px),transparent)] [scrollbar-width:none] sm:mx-0 lg:mx-11 lg:px-2 [&::-webkit-scrollbar]:hidden"
           >
             {menu.map((c) => (
               <button
@@ -132,14 +155,14 @@ export default function MenuTabs() {
                 role="tab"
                 aria-selected={active === c.id}
                 onClick={() => select(c.id)}
-                className={`relative shrink-0 whitespace-nowrap rounded-[4px] px-4 py-2.5 font-serif text-[18px] transition ${
+                className={`relative shrink-0 whitespace-nowrap rounded-[4px] px-4 py-2.5 font-serif text-[18px] transition-colors duration-300 ${
                   active === c.id ? "text-coal-900" : "text-ink hover:text-gold-200"
                 }`}
               >
                 {active === c.id && (
                   <motion.span
                     layoutId="tab-pill"
-                    className="absolute inset-0 -z-0 rounded-[4px] bg-gold-btn"
+                    className="absolute inset-0 -z-0 rounded-[4px] bg-gold-btn shadow-gold"
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
                   />
                 )}
@@ -155,10 +178,10 @@ export default function MenuTabs() {
         <AnimatePresence mode="wait">
           <motion.div
             key={cat.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.35, ease }}
           >
             <div className="mb-8 flex items-end gap-5">
               <h2 className="font-serif text-[40px] leading-none text-[#f7f1e8] sm:text-[48px]">{cat.title}</h2>
@@ -167,18 +190,9 @@ export default function MenuTabs() {
             </div>
 
             {cat.items.length > 0 ? (
-              <div
-                className={`grid gap-5 sm:grid-cols-2 lg:gap-6 ${
-                  cat.items.length === 5 ? "lg:grid-cols-6" : cat.items.length % 3 === 0 ? "lg:grid-cols-3" : "lg:grid-cols-4"
-                }`}
-              >
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 {cat.items.map((dish, i) => (
-                  <div
-                    key={dish.name}
-                    className={`flex ${cat.items.length === 5 ? (i < 2 ? "lg:col-span-3" : "lg:col-span-2") : ""} ${
-                      cat.items.length % 2 === 1 && i === cat.items.length - 1 ? "sm:col-span-2 lg:col-span-2" : ""
-                    }`}
-                  >
+                  <div key={dish.name} className="flex">
                     <DishCard dish={dish} i={i} />
                   </div>
                 ))}
@@ -200,6 +214,30 @@ export default function MenuTabs() {
                 </div>
               </div>
             )}
+
+            {/* соседние категории */}
+            <div className="mt-12 flex items-center justify-between gap-4 border-t border-gold-500/25 pt-6">
+              {prev ? (
+                <button onClick={() => select(prev.id)} className="group flex items-center gap-3 text-left font-serif text-[18px] text-ink-muted transition hover:text-gold-200">
+                  <I.Arrow size={22} className="rotate-180 text-gold-300 transition group-hover:-translate-x-1" />
+                  <span>
+                    <span className="block font-body text-[11px] uppercase tracking-[0.2em] text-ink-soft">Назад</span>
+                    {prev.title}
+                  </span>
+                </button>
+              ) : (
+                <span />
+              )}
+              {next && (
+                <button onClick={() => select(next.id)} className="group flex items-center gap-3 text-right font-serif text-[18px] text-ink transition hover:text-gold-200">
+                  <span>
+                    <span className="block font-body text-[11px] uppercase tracking-[0.2em] text-ink-soft">Дальше</span>
+                    {next.title}
+                  </span>
+                  <I.Arrow size={22} className="text-gold-300 transition group-hover:translate-x-1" />
+                </button>
+              )}
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>
