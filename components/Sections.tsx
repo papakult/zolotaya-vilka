@@ -94,22 +94,18 @@ export function Quote() {
 
 export function MenuLight() {
   return (
-    <section id="menu" className="bg-cream-texture text-cocoa">
+    <section id="menu" className="bg-texture relative border-t border-gold-500/25">
       <div className="container-x grid gap-10 py-16 lg:grid-cols-[0.62fr_1.38fr] lg:gap-10 lg:py-20">
         <Reveal className="flex flex-col justify-center">
-          <p className="font-body text-[11px] uppercase tracking-eyebrow text-cocoa-muted">Наше меню</p>
-          <h2 className="mt-5 font-serif text-[40px] font-medium leading-[1.05] text-cocoa sm:text-[44px]">
+          <p className="eyebrow">Наше меню</p>
+          <h2 className="mt-5 font-serif text-[40px] font-medium leading-[1.05] text-[#f7f1e8] sm:text-[44px]">
             Любимые блюда
-            <br />
-            домашней кухни
+            <span className="block font-normal italic text-gold-200">домашней кухни</span>
           </h2>
-          <p className="mt-5 max-w-[300px] text-[15px] leading-[1.55] text-cocoa-muted">
+          <p className="mt-5 max-w-[300px] text-[15px] leading-[1.55] text-ink-muted">
             Готовим из качественных продуктов по проверенным рецептам. Простые, понятные вкусы, которые объединяют.
           </p>
-          <Link
-            href="/menu"
-            className="mt-8 inline-flex w-fit items-center gap-3 rounded-[4px] bg-caramel-light px-8 py-4 font-serif text-[17px] font-semibold text-cocoa transition hover:bg-[#ead3ad]"
-          >
+          <Link href="/menu" className="btn-gold mt-8 w-fit px-8 py-4 text-[17px]">
             Смотреть всё меню <I.Arrow />
           </Link>
         </Reveal>
@@ -118,7 +114,7 @@ export function MenuLight() {
             <Reveal key={c.title} delay={0.08 * i}>
               <Link
                 href={c.href}
-                className="group block h-full overflow-hidden rounded-[6px] bg-[#fbf6ee] shadow-[0_10px_30px_-18px_rgba(80,55,25,.35)] transition hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(80,55,25,.45)]"
+                className="group block h-full overflow-hidden rounded-[6px] border border-gold-400/35 bg-coal-800/80 transition duration-500 hover:-translate-y-1 hover:border-gold-300/70 hover:shadow-card"
               >
                 <div className="relative aspect-[4/4.6] overflow-hidden">
                   <Image
@@ -128,11 +124,12 @@ export function MenuLight() {
                     sizes="(min-width:768px) 200px, 50vw"
                     className="object-cover transition duration-700 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-coal-800/70 via-transparent to-transparent" />
                 </div>
                 <div className="px-4 pb-5 pt-4">
-                  <p className="font-serif text-[20px] leading-tight text-cocoa">{c.title}</p>
-                  <p className="mt-1 text-[12px] text-cocoa-muted">{c.desc}</p>
-                  <p className="mt-4 font-serif text-[18px] text-cocoa">{c.from}</p>
+                  <p className="font-serif text-[20px] leading-tight text-[#f7f1e8]">{c.title}</p>
+                  <p className="mt-1 text-[12px] text-ink-muted">{c.desc}</p>
+                  <p className="mt-4 font-serif text-[18px] text-gold-200">{c.from}</p>
                 </div>
               </Link>
             </Reveal>
