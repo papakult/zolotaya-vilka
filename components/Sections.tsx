@@ -192,7 +192,6 @@ export function BookingDelivery() {
         {/* доставка только по звонку */}
         <Reveal
           delay={0.12}
-          id="delivery"
           className="relative flex flex-col overflow-hidden rounded-md border border-gold-400/60 bg-coal-800/95 shadow-card"
         >
           <div className="relative flex-1 p-6 sm:p-8">

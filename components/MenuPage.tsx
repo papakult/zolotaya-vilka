@@ -3,37 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Branch, Reveal, ScriptNote } from "./Decor";
+import { ScriptNote } from "./Decor";
 import * as I from "./Icons";
+import MenuTabs from "./MenuTabs";
+import Delivery from "./Delivery";
 import { img } from "@/lib/site";
-import { chefPick, menu, type Category } from "@/lib/menu";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-const byId = (id: string) => menu.find((c) => c.id === id)!;
-
-function CategoryBlock({ cat, className = "" }: { cat: Category; className?: string }) {
-  return (
-    <Reveal id={cat.id} className={`scroll-mt-24 px-6 py-9 sm:px-8 lg:px-9 ${className}`}>
-      <div className="flex items-center gap-4">
-        <h2 className="font-serif text-[32px] leading-none text-[#f7f1e8] sm:text-[34px]">{cat.title}</h2>
-        <span className="h-px flex-1 bg-gold-400/60" />
-        {cat.note && <span className="font-body text-[12px] text-ink-muted">{cat.note}</span>}
-      </div>
-      <ul className="mt-6 space-y-4">
-        {cat.items.map((d) => (
-          <li key={d.name} className="flex items-start justify-between gap-6">
-            <div>
-              <p className="font-serif text-[18px] leading-tight text-ink">{d.name}</p>
-              <p className="mt-0.5 max-w-[290px] text-[12.5px] leading-snug text-ink-muted">{d.desc}</p>
-            </div>
-            <span className="shrink-0 whitespace-nowrap font-serif text-[18px] text-ink">{d.price}</span>
-          </li>
-        ))}
-      </ul>
-    </Reveal>
-  );
-}
-
 export default function MenuPage() {
   return (
     <>
@@ -113,78 +89,11 @@ export default function MenuPage() {
         />
       </section>
 
-      {/* СЕТКА МЕНЮ */}
+      <MenuTabs />
+
+      <Delivery />
+
       <section className="bg-texture">
-        <div className="mx-auto max-w-[1200px] divide-y divide-gold-500/40">
-          {/* ряд 1 */}
-          <div className="grid lg:grid-cols-3 lg:divide-x lg:divide-gold-500/40">
-            <CategoryBlock cat={byId("breakfast")} />
-            <CategoryBlock cat={byId("salads")} className="border-t border-gold-500/40 lg:border-t-0" />
-            <div className="border-t border-gold-500/40 p-6 lg:border-t-0 lg:p-7">
-              <Reveal className="relative h-full overflow-hidden rounded-md border border-gold-400/70 p-7">
-                <Branch className="pointer-events-none absolute -right-2 top-2 h-40 w-32 text-gold-500/40" />
-                <p className="flex items-center gap-3 font-body text-[11px] uppercase tracking-[0.22em] text-gold-200">
-                  <I.Crown size={20} className="text-gold-300" /> Рекомендация шеф-повара
-                </p>
-                <p className="mt-6 font-serif text-[28px] leading-[1.1] text-[#f7f1e8]">
-                  Тёплый салат
-                  <br />с говядиной
-                </p>
-                <p className="mt-4 max-w-[230px] text-[13px] leading-snug text-ink-muted">{chefPick.desc}</p>
-                <div className="mt-4 flex items-end justify-between gap-4">
-                  <div>
-                    <p className="font-serif text-[26px] text-ink">{chefPick.price}</p>
-                    <I.Arrow size={40} className="mt-2 text-gold-300" />
-                  </div>
-                  <p className="font-serif text-[15px] italic leading-tight text-gold-200">
-                    Гармония вкуса
-                    <br />в каждой детали
-                  </p>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-
-          {/* ряд 2 */}
-          <div className="grid lg:grid-cols-3 lg:divide-x lg:divide-gold-500/40">
-            <Reveal className="relative min-h-[280px] overflow-hidden">
-              <Image src={img.tapestryTable} alt="Столик с лампой у гобелена" fill sizes="(min-width:1024px) 400px, 100vw" className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-tl from-coal-900/80 via-transparent to-transparent" />
-              <ScriptNote lines={["Уют", "в каждой", "встрече"]} rotate={-14} className="absolute bottom-6 right-6 text-[30px]" />
-            </Reveal>
-            <CategoryBlock cat={byId("hot")} />
-            <CategoryBlock cat={byId("pasta")} className="border-t border-gold-500/40 lg:border-t-0" />
-          </div>
-
-          {/* ряд 3 */}
-          <div className="grid lg:grid-cols-3 lg:divide-x lg:divide-gold-500/40">
-            <CategoryBlock cat={byId("desserts")} />
-            <CategoryBlock cat={byId("drinks")} className="border-t border-gold-500/40 lg:border-t-0" />
-            <Reveal className="relative min-h-[300px] overflow-hidden">
-              <Image
-                src={img.tapestryCabinet}
-                alt="Старинный буфет с посудой"
-                fill
-                sizes="(min-width:1024px) 400px, 100vw"
-                className="object-cover object-[80%_center]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-coal-900 via-coal-900/80 to-coal-900/10" />
-              <div className="relative p-8 pt-12">
-                <span className="font-serif text-[54px] leading-none text-gold-300">“</span>
-                <p className="-mt-3 font-serif text-[26px] italic leading-[1.25] text-[#f7f1e8]">
-                  Вкус
-                  <br />
-                  начинается
-                  <br />с атмосферы
-                </p>
-                <p className="mt-8 flex items-center gap-3 font-body text-[12px] tracking-[0.12em] text-ink-muted">
-                  <span className="h-px w-8 bg-gold-300" /> Золотая вилка
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-
         {/* нижняя плашка */}
         <div className="border-t border-gold-500/40">
           <div className="container-x flex flex-col items-center gap-6 py-9 text-center md:flex-row md:justify-between md:text-left">
