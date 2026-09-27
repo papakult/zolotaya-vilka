@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     title: "Меню ресторана «Золотая Вилка» — Сочи",
     description: "Завтраки, салаты, горячие блюда, мангал, десерты и доставка. Полное меню ресторана «Золотая Вилка» в Сочи.",
     url: "/menu",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
     siteName: "Золотая Вилка",
     locale: "ru_RU",
     type: "website",

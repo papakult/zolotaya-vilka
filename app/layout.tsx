@@ -34,8 +34,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: {
-    title: "Золотая Вилка — домашний ресторан в Сочи, Мацеста",
-    description: "Домашняя кухня, уютная атмосфера, доставка и бронирование столиков в Сочи.",
+    title: "Золотая Вилка · домашний ресторан в Сочи",
+    description: "Домашняя кухня и мангал на Мацесте. Доставка по Мацесте, Хосте и Бытхе, бронь столов по телефону.",
     url: "/",
     siteName: "Золотая Вилка",
     locale: "ru_RU",
