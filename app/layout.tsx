@@ -40,8 +40,9 @@ export const metadata: Metadata = {
     siteName: "Золотая Вилка",
     locale: "ru_RU",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Ресторан «Золотая Вилка» в Сочи: домашняя кухня, мангал и доставка" }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: ["/og.png"] },
 };
 
 export const viewport: Viewport = {

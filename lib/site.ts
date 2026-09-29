@@ -2,7 +2,7 @@
  * Единый файл с контактами и данными ресторана.
  * Всё, что нужно поменять (телефон, адрес, часы), меняется здесь.
  */
-export const SITE_URL = "https://zolotaya-vilka.vercel.app";
+export const SITE_URL = "https://zolotaya-vilka.ru";
 
 export const site = {
   name: "Золотая Вилка",
